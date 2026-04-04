@@ -23,7 +23,7 @@ const AdminDashboard = () => {
   const restaurant = JSON.parse(localStorage.getItem('restaurant'));
 
   const getAuthHeaders = () => { return { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }; };
-// 👉 YEH WALA USE-EFFECT REPLACE KARNA HAI
+
   useEffect(() => {
     if (!localStorage.getItem('token')) {
       navigate('/login'); 
@@ -34,12 +34,15 @@ const AdminDashboard = () => {
         fetchMenu(); 
       }
 
+      // 🟢 Socket backend (Render) se connect hoga
       const socket = io('https://smart-menu-system-txbn.onrender.com');
+      
       if(restaurant?.id) {
           socket.on(`new-order-${restaurant.id}`, (newOrder) => {
-              // 🔔 NAYA: KITCHEN BELL SOUND EFFECT
-              const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
-              audio.play().catch(e => console.log("Audio auto-play blocked", e));
+              
+              // 🔔 NAYA: Local mp3 file use kar rahe hain (100% chalega)
+              const audio = new Audio('/notification.mp3');
+              audio.play().catch(e => console.log("Audio block hui, please screen par click karein:", e));
               
               setOrders(prev => [newOrder, ...prev]);
               if(userRole === 'owner') fetchMenu(); 
@@ -51,21 +54,21 @@ const AdminDashboard = () => {
 
   const fetchMenu = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/menu', getAuthHeaders());
+      const response = await axios.get('https://smart-menu-system-txbn.onrender.com/api/menu', getAuthHeaders());
       setMenuItems(response.data);
     } catch (error) { console.error('Error fetching menu:', error); }
   };
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/analytics', getAuthHeaders());
+      const response = await axios.get('https://smart-menu-system-txbn.onrender.com/api/analytics', getAuthHeaders());
       setAnalytics(response.data);
     } catch (error) { console.error('Error fetching analytics:', error); }
   };
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/orders', getAuthHeaders());
+      const response = await axios.get('https://smart-menu-system-txbn.onrender.com/api/orders', getAuthHeaders());
       setOrders(response.data);
     } catch (error) { console.error('Error fetching orders:', error); }
   };
@@ -73,7 +76,7 @@ const AdminDashboard = () => {
   const handleMenuSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/menu', formData, getAuthHeaders());
+      await axios.post('https://smart-menu-system-txbn.onrender.com/api/menu', formData, getAuthHeaders());
       alert('✅ Menu Item Added!');
       setFormData({ name: '', price: '', category: 'Starters', description: '', stockQuantity: 50 });
       fetchMenu(); 
@@ -82,7 +85,7 @@ const AdminDashboard = () => {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}`, { status: newStatus }, getAuthHeaders());
+      await axios.put(`https://smart-menu-system-txbn.onrender.com/api/orders/${orderId}`, { status: newStatus }, getAuthHeaders());
       fetchOrders(); 
       if(newStatus === 'Completed' && userRole === 'owner') fetchAnalytics(); 
     } catch (error) { console.error('Error:', error); }
@@ -93,7 +96,7 @@ const AdminDashboard = () => {
     try {
       const username = e.target.username.value;
       const password = e.target.password.value;
-      await axios.post('http://localhost:5000/api/staff/create', 
+      await axios.post('https://smart-menu-system-txbn.onrender.com/api/staff/create', 
         { username, password, restaurantName: restaurant.name }, getAuthHeaders());
       alert('✅ Chef account created successfully!');
       e.target.reset();
@@ -128,7 +131,10 @@ const AdminDashboard = () => {
 
   const generateQR = () => {
     if(!qrTableNumber) return alert("Pehle Table Number daalo!");
-    const menuLink = `http://localhost:5173/menu/${restaurant?.slug}/${qrTableNumber}`;
+    
+    // 🚀 MAGIC FIX: window.location.origin apne aap Vercel ka frontend link uthayega!
+    const menuLink = `${window.location.origin}/menu/${restaurant?.slug}/${qrTableNumber}`;
+    
     setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(menuLink)}`);
   };
 
