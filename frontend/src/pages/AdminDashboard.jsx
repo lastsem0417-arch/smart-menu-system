@@ -40,7 +40,7 @@ const AdminDashboard = () => {
       if(restaurant?.id) {
           socket.on(`new-order-${restaurant.id}`, (newOrder) => {
               
-              // 🔔 NAYA: Local mp3 file use kar rahe hain (100% chalega)
+              // 🔔 Local mp3 file use kar rahe hain
               const audio = new Audio('/notification.mp3');
               audio.play().catch(e => console.log("Audio block hui, please screen par click karein:", e));
               
@@ -132,8 +132,10 @@ const AdminDashboard = () => {
   const generateQR = () => {
     if(!qrTableNumber) return alert("Pehle Table Number daalo!");
     
-    // 🚀 MAGIC FIX: window.location.origin apne aap Vercel ka frontend link uthayega!
-    const menuLink = `${window.location.origin}/menu/${restaurant?.slug}/${qrTableNumber}`;
+    // 🚀 BOOM: Asli Vercel Link yahan fix kar diya hai!
+    const FRONTEND_URL = "https://smart-menu-system-six.vercel.app"; 
+    
+    const menuLink = `${FRONTEND_URL}/menu/${restaurant?.slug}/${qrTableNumber}`;
     
     setQrCodeUrl(`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(menuLink)}`);
   };
