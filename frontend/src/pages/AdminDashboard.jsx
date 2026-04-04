@@ -34,7 +34,7 @@ const AdminDashboard = () => {
         fetchMenu(); 
       }
 
-      const socket = io('http://localhost:5000');
+      const socket = io('https://smart-menu-system-txbn.onrender.com');
       if(restaurant?.id) {
           socket.on(`new-order-${restaurant.id}`, (newOrder) => {
               // 🔔 NAYA: KITCHEN BELL SOUND EFFECT

@@ -23,7 +23,7 @@ const CustomerMenu = () => {
     // Menu fetch karna
     const fetchMenu = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/menu/public/${restaurantSlug}`);
+        const response = await axios.get(`https://smart-menu-system-txbn.onrender.com/api/menu/public/${restaurantSlug}`);
         setRestaurantData({ id: response.data.restaurantId, name: response.data.restaurantName });
         setMenuItems(response.data.items);
       } catch (error) { console.error("Error fetching menu:", error); }
@@ -64,7 +64,7 @@ const CustomerMenu = () => {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/orders', {
+      await axios.post('/api/orders', {
         restaurantId: restaurantData.id, 
         tableNumber: Number(tableNumber),
         items: cart.map(i => ({ menuItem: i._id, name: i.name, price: i.price, quantity: i.quantity })),

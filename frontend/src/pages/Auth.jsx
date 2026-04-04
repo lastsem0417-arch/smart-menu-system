@@ -25,7 +25,7 @@ const Auth = () => {
       let response;
       
       if (authMode === 'owner-register') {
-        response = await axios.post('http://localhost:5000/api/auth/register', {
+        response = await axios.post('https://smart-menu-system-txbn.onrender.com/api/auth/register', {
           restaurantName: formData.restaurantName,
           email: formData.email,
           password: formData.password
