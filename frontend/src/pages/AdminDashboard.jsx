@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+=import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
@@ -132,8 +132,8 @@ const AdminDashboard = () => {
   const generateQR = () => {
     if(!qrTableNumber) return alert("Pehle Table Number daalo!");
     
-    // 🚀 BOOM: Asli Vercel Link yahan fix kar diya hai!
-    const FRONTEND_URL = "https://smart-menu-system-six.vercel.app"; 
+    // 🚀 BOOM: Asli Render Frontend Link yahan fix kar diya hai!
+    const FRONTEND_URL = "https://smart-menu-system-1.onrender.com"; 
     
     const menuLink = `${FRONTEND_URL}/menu/${restaurant?.slug}/${qrTableNumber}`;
     
