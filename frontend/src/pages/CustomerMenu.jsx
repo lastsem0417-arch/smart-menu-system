@@ -64,7 +64,8 @@ const CustomerMenu = () => {
     }
 
     try {
-      await axios.post('/api/orders', {
+      // 🚀 YAHAN BHI FULL RENDER LINK DAALNA ZAROORI THA
+      await axios.post('https://smart-menu-system-txbn.onrender.com/api/orders', {
         restaurantId: restaurantData.id, 
         tableNumber: Number(tableNumber),
         items: cart.map(i => ({ menuItem: i._id, name: i.name, price: i.price, quantity: i.quantity })),

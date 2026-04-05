@@ -33,14 +33,14 @@ const Auth = () => {
         localStorage.setItem('role', 'owner');
       } 
       else if (authMode === 'owner-login') {
-        response = await axios.post('http://localhost:5000/api/auth/login', {
+        response = await axios.post('https://smart-menu-system-txbn.onrender.com/api/auth/login', {
           email: formData.email,
           password: formData.password
         });
         localStorage.setItem('role', 'owner');
       } 
       else if (authMode === 'chef-login') {
-        response = await axios.post('http://localhost:5000/api/staff/login', {
+        response = await axios.post('https://smart-menu-system-txbn.onrender.com/api/staff/login', {
           username: formData.username,
           password: formData.password
         });
